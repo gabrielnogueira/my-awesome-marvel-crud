@@ -1,10 +1,23 @@
-import React from 'react';
-import api from 'api';
+import React, {useEffect} from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {fetchCharacters} from '../redux/actions';
 
-api.get('/characters', {
-    limit:1,
-}).then(result=>{
-    console.log(result);
+const Master = (props) => {
+    const { fetchCharacters } = props;
+
+    useEffect(() => {
+        fetchCharacters({limit:10});
+    }, [fetchCharacters])
+
+    return <div>Hello World! {props.characters.length}</div>
+}
+
+const mapStateToProps = state => ({
+    characters: state.characters
 })
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchCharacters
+}, dispatch)
 
-export default ()=><div>Hello World!</div>  
+export default connect(mapStateToProps, mapDispatchToProps)(Master)

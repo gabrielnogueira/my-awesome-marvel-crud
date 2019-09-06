@@ -1,4 +1,4 @@
-import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import {createLogger} from 'redux-logger';
 import promiseMiddeware from 'redux-promise';
 import {reducers as pagesReducer} from '../pages';
@@ -8,8 +8,6 @@ const configureStore = (initialState) =>{
 
   const comp = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  const reducers = combineReducers(pagesReducer);
-
   const enhancer = comp(
     applyMiddleware(
       loggerMiddleware,
@@ -17,7 +15,9 @@ const configureStore = (initialState) =>{
     )
   );
 
-  return createStore(reducers, initialState, enhancer);
+  return createStore(pagesReducer, initialState, enhancer);
 }
 
-export default configureStore({});
+export default configureStore({
+  characters:[]
+});

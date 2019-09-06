@@ -1,2 +1,2 @@
-export {reducers, actionTypes, actionCreators} from './redux';
+export * from './redux';
 export {default} from './routes'; 
