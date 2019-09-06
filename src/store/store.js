@@ -17,8 +17,6 @@ const configureStore = (initialState) =>{
     )
   );
 
-  console.log(reducers);
-
   return createStore(reducers, initialState, enhancer);
 }
 
