@@ -6,5 +6,5 @@ import Pages from './pages';
 
 export default () => 
   <Provider store={store}>
-      <Pages />
+        <Pages />
   </Provider>
