@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware, compose} from 'redux';
 import {createLogger} from 'redux-logger';
 import promiseMiddeware from 'redux-promise';
+import multiMidleware from 'redux-multi';
 import {reducers as pagesReducer} from '../pages';
 
 const configureStore = (initialState) =>{
@@ -11,6 +12,7 @@ const configureStore = (initialState) =>{
   const enhancer = comp(
     applyMiddleware(
       loggerMiddleware,
+      multiMidleware,
       promiseMiddeware
     )
   );
@@ -19,5 +21,6 @@ const configureStore = (initialState) =>{
 }
 
 export default configureStore({
-  characters:[]
+  characters:[],
+  isLoading: true
 });

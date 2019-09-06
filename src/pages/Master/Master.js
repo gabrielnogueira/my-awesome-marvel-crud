@@ -10,11 +10,16 @@ const Master = (props) => {
         fetchCharacters({limit:10});
     }, [fetchCharacters])
 
+    if(props.isLoading){
+        return <div>Loading...</div>
+    }
+
     return <div>Hello World! {props.characters.length}</div>
 }
 
 const mapStateToProps = state => ({
-    characters: state.characters
+    characters: state.characters,
+    isLoading: state.isLoading
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchCharacters
