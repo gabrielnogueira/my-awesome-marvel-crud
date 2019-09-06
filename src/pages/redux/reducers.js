@@ -8,6 +8,15 @@ export default (state, action) => {
                 characters: action.payload.data.data.results,
                 isLoading:false
             }
+        case actionTypes.FETCH_MORE_CHARACTERS:
+                return {
+                    ...state,
+                    characters: [
+                        ...state.characters,
+                        ...action.payload.data.data.results,
+                    ],
+                    isLoading:false
+                }
         default:
             return state
     }

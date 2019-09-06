@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {fetchCharacters} from '../redux/actions';
+import {fetchCharacters, fetchMoreCharacters} from '../redux/actions';
+import ReactBricks from 'react-bricks-infinite';
 
 const Master = (props) => {
-    const { fetchCharacters } = props;
+    const {characters, fetchCharacters, fetchMoreCharacters } = props;
 
     useEffect(() => {
         fetchCharacters({limit:10});
@@ -14,7 +15,15 @@ const Master = (props) => {
         return <div>Loading...</div>
     }
 
-    return <div>Hello World! {props.characters.length}</div>
+    const charactersCard = characters.map(char=><div>{char.name}</div>)
+
+    return  <ReactBricks
+        containerId = {"bricks-container-app"}
+        loadMoreBricks = {()=> fetchMoreCharacters({limit:10, offset:characters.length})}
+        hasMoreBricks  = {true}
+        reRender = {false}
+        bricks= {charactersCard}
+    />
 }
 
 const mapStateToProps = state => ({
@@ -22,7 +31,8 @@ const mapStateToProps = state => ({
     isLoading: state.isLoading
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchCharacters
+    fetchCharacters,
+    fetchMoreCharacters
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Master)
