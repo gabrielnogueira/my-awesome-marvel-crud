@@ -2,7 +2,7 @@
   "name": "my-awesome-marvel-crud",
   "version": "0.1.0",
   "private": true,
-  "main":"./src/index.js",
+  "main": "./src/index.js",
   "dependencies": {
     "@material-ui/core": "^4.4.0",
     "axios": "^0.19.0",
@@ -38,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "redux-logger": "^3.0.6"
   }
 }
