@@ -8,18 +8,31 @@ export default (state, action) => {
                 ...state,
                 characters: data.results,
                 total: data.total,
-                isLoading:false
             }
         case actionTypes.FETCH_MORE_CHARACTERS:
+            return {
+                ...state,
+                characters: [
+                    ...state.characters,
+                    ...data.results,
+                ],
+                total: data.total,
+            }
+        case actionTypes.FETCH_SERIES:
                 return {
                     ...state,
-                    characters: [
-                        ...state.characters,
-                        ...data.results,
-                    ],
-                    total: data.total,
-                    isLoading:false
+                    series: data.results,
+                    totalSeries: data.total,
                 }
+        case actionTypes.FETCH_MORE_SERIES:
+            return {
+                ...state,
+                series: [
+                    ...state.series,
+                    ...data.results,
+                ],
+                totalSeries: data.total,
+            }
         default:
             return state
     }

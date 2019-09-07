@@ -4,6 +4,7 @@ import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import imagesLoaded from 'imagesloaded';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Link } from 'react-router-dom';
 import './masonry.css';
 
 const resizeMasonryItem = (item) => {
@@ -17,16 +18,6 @@ const resizeMasonryItem = (item) => {
     item.style.gridRowEnd = 'span '+rowSpan;
     if(gridImagesAsContent) {
       item.querySelector('img.masonry-content').style.height = item.getBoundingClientRect().height + "px";
-    }
-  }
-}
-
-const resizeAllMasonryItems = () => {
-  var allItems = document.querySelectorAll('.masonry-item');
-
-  if( allItems ) {
-    for(var i=0;i>allItems.length;i++){
-      resizeMasonryItem(allItems[i]);
     }
   }
 }
@@ -45,12 +36,13 @@ const waitForImages = (items) => {
 
 const masonryEvents = ['load', 'resize'];
 masonryEvents.forEach( function(event) {
-  window.addEventListener(event, resizeAllMasonryItems);
+  window.addEventListener(event, waitForImages);
 });
 
 export default (props) => {
   const {items, total, loadMore} = props;
-
+  
+ 
   useEffect(() => {
     waitForImages(items);
   }, [items])
@@ -62,10 +54,12 @@ export default (props) => {
                       <div className="masonry-wrapper">
                           <div className="masonry">
                                 {items.map(item=><div key={item.id} className="masonry-item">
-                                    <div className="masonry-content">
-                                        <img src={item.imageSrc} alt={item.name} />
-                                        <h3 className="masonry-title">{item.title}</h3>
-                                    </div>
+                                    <Link to={`/details/${item.id}`}>
+                                      <div className="masonry-content">
+                                          <img src={item.imageSrc} alt={item.name} />
+                                          <h3 className="masonry-title">{item.title}</h3>
+                                      </div>
+                                    </Link>
                                 </div>)}
                           </div>
                       </div>

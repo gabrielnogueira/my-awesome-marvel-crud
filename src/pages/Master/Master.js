@@ -18,7 +18,7 @@ const getFetchParams = (searchText=null, customParams={}) => {
 }
 
 const Master = (props) => {
-    const {characters, fetchCharacters, fetchMoreCharacters, total} = props;
+    const {characters = null, fetchCharacters, fetchMoreCharacters, total} = props;
     const [searchText, setSearchText] = useState();
     
     useEffect(() => {
@@ -26,8 +26,8 @@ const Master = (props) => {
     }, [fetchCharacters, searchText])
 
     return  <div>
-                <AppBar onSearch={setSearchText} searchPlaceholder="Search Characters" />
-                {props.isLoading ? <div><Skeleton /></div> :
+                <AppBar title={<div>Marvel Comics Explorer</div>} onSearch={(value)=> (value.length >= 3 || !value) && setSearchText(value)} searchPlaceholder="Search Characters" />
+                {characters == null ? <div><Skeleton /></div> :
                 <Masonry items={characters.map(char=>({id:char.id, title:char.name, imageSrc:`${char.thumbnail.path}.${char.thumbnail.extension}` }))}
                          total={total}
                          loadMore={()=> fetchMoreCharacters(getFetchParams(searchText, {offset:characters.length}))}
@@ -38,7 +38,6 @@ const Master = (props) => {
 
 const mapStateToProps = state => ({
     characters: state.characters,
-    isLoading: state.isLoading,
     total: state.total,
 })
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -75,9 +75,9 @@ export default (props) => {
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            Marvel Comics
+            {props.title}
           </Typography>
-          <div className={classes.search}>
+          {onSearch && <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -95,7 +95,7 @@ export default (props) => {
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
-          </div>
+          </div>}
         </Toolbar>
       </AppBar>
     </div>
