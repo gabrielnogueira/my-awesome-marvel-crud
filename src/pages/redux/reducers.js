@@ -1,11 +1,13 @@
 import {actionTypes} from './actions';
 
 export default (state, action) => {
+    const {data} = action.payload ? action.payload.data : {};
     switch(action.type){
         case actionTypes.FETCH_CHARACTERS:
             return {
                 ...state,
-                characters: action.payload.data.data.results,
+                characters: data.results,
+                total: data.total,
                 isLoading:false
             }
         case actionTypes.FETCH_MORE_CHARACTERS:
@@ -13,8 +15,9 @@ export default (state, action) => {
                     ...state,
                     characters: [
                         ...state.characters,
-                        ...action.payload.data.data.results,
+                        ...data.results,
                     ],
+                    total: data.total,
                     isLoading:false
                 }
         default:

@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {fetchCharacters, fetchMoreCharacters} from '../redux/actions';
-import ReactBricks from 'react-bricks-infinite';
-import SearchBar from 'material-ui-search-bar'
+import {AppBar, Masonry} from '../components';
+import Skeleton from './Skeleton';
 
-const defaultParams = {limit:10}
+const defaultParams = {limit:20}
 const getFetchParams = (searchText=null, customParams={}) => {
-    if(searchText){
+    if(searchText && searchText !== ''){
         customParams.nameStartsWith = searchText;
     }
 
@@ -18,56 +18,28 @@ const getFetchParams = (searchText=null, customParams={}) => {
 }
 
 const Master = (props) => {
-    const {characters, fetchCharacters, fetchMoreCharacters} = props;
+    const {characters, fetchCharacters, fetchMoreCharacters, total} = props;
     const [searchText, setSearchText] = useState();
-    const [delaySearch, setDelaySearch] = useState();
-
-    const clearDelay = () =>{
-        if(delaySearch) {
-            clearTimeout(delaySearch);
-        }
-    }
-
+    
     useEffect(() => {
         fetchCharacters(getFetchParams(searchText));
     }, [fetchCharacters, searchText])
 
-
-    return  props.isLoading ? 
-            <div>Loading...</div> : 
-            <div>
-                <SearchBar
-                    onChange={(searchText)=> {
-                        clearDelay();
-                        setDelaySearch(setTimeout(() => {
-                            setSearchText(searchText);
-                        }, 300))
-                    }}
-                    onRequestSearch={(searchText) => {
-                        clearDelay(); 
-                        setSearchText(searchText)
-                    }}
-                    style={{
-                        margin: '0 auto',
-                        maxWidth: 800
-                    }}
-                    />
-                <ReactBricks
-                    containerId = {"bricks-container-app"}
-                    loadMoreBricks = {()=> {
-                        fetchMoreCharacters(getFetchParams(searchText, {offset:characters.length}))
-                    }}
-                    hasMoreBricks  = {true}
-                    reRender = {false}
-                    bricks= {characters.map(char=><div>{char.name}</div>)}
-                />
+    return  <div>
+                <AppBar onSearch={setSearchText} searchPlaceholder="Search Characters" />
+                {props.isLoading ? <div><Skeleton /></div> :
+                <Masonry items={characters.map(char=>({id:char.id, title:char.name, imageSrc:`${char.thumbnail.path}.${char.thumbnail.extension}` }))}
+                         total={total}
+                         loadMore={()=> fetchMoreCharacters(getFetchParams(searchText, {offset:characters.length}))}
+                    />}
             </div>
 
 }
 
 const mapStateToProps = state => ({
     characters: state.characters,
-    isLoading: state.isLoading
+    isLoading: state.isLoading,
+    total: state.total,
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchCharacters,
