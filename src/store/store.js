@@ -1,7 +1,8 @@
-import {createStore, applyMiddleware, compose} from 'redux';
+import {createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import {createLogger} from 'redux-logger';
-import promiseMiddeware from 'redux-promise';
-import multiMidleware from 'redux-multi';
+import thunkMidleware from 'redux-thunk';
+import { reducer as formReducer } from 'redux-form'
+
 import {reducers as pagesReducer} from '../pages';
 
 const configureStore = (initialState) =>{
@@ -9,18 +10,24 @@ const configureStore = (initialState) =>{
 
   const comp = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+  const rootReducer = combineReducers({
+    form: formReducer,
+    pages: pagesReducer
+  })
+
   const enhancer = comp(
     applyMiddleware(
       loggerMiddleware,
-      multiMidleware,
-      promiseMiddeware
+      thunkMidleware,
     )
   );
 
-  return createStore(pagesReducer, initialState, enhancer);
+  return createStore(rootReducer, initialState, enhancer);
 }
 
 export default configureStore({
-  characters:[],
-  isLoading: true
+  pages:{
+    characters:[],
+    customCharacters:[]
+  }
 });

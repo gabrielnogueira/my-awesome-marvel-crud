@@ -49,7 +49,7 @@ export default (props) => {
 
   return <InfiniteScroll
             loadMore={()=>loadMore()}
-            hasMore={items.length < total}
+            hasMore={items && (items.length < total)}
             loader={<div className="loader" style={{textAlign:'center', padding:20}} key={0}><CircularProgress /></div>} >
                       <div className="masonry-wrapper">
                           <div className="masonry">

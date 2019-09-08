@@ -25,9 +25,10 @@ const Master = (props) => {
         fetchCharacters(getFetchParams(searchText));
     }, [fetchCharacters, searchText])
 
+    console.log(characters);
     return  <div>
                 <AppBar title={<div>Marvel Comics Explorer</div>} onSearch={(value)=> (value.length >= 3 || !value) && setSearchText(value)} searchPlaceholder="Search Characters" />
-                {characters == null ? <div><Skeleton /></div> :
+                {(!characters || characters.length === 0) ? <div><Skeleton /></div> :
                 <Masonry items={characters.map(char=>({id:char.id, title:char.name, imageSrc:`${char.thumbnail.path}.${char.thumbnail.extension}` }))}
                          total={total}
                          loadMore={()=> fetchMoreCharacters(getFetchParams(searchText, {offset:characters.length}))}
@@ -36,9 +37,9 @@ const Master = (props) => {
 
 }
 
-const mapStateToProps = state => ({
-    characters: state.characters,
-    total: state.total,
+const mapStateToProps = ({pages}) => ({
+    characters: pages.characters,
+    total: pages.total,
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchCharacters,

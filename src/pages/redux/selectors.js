@@ -1,12 +1,7 @@
-import {createSelector} from 'reselect';
+// eslint-disable-next-line
+export const getSelectedCharacter = (state, id) => state.customCharacters[id] || state.characters.filter(char=>char.id == id)[0] || {}
 
-export const getState = state => state;
+export const getSeries = (state, id) => state.customCharacters[id] ? state.customCharacters[id].series || null : null;
 
-export const getSelectedCharacter = (state, id) => createSelector(
-    getState,
-    state => {
-        // eslint-disable-next-line
-        return state.selectedCharacter || state.characters.filter(char=>char.id == id)[0] || {};
-    }
-)(state)
+export const getTotalSeries = (state, id) => state.customCharacters[id] ? state.customCharacters[id].totalSeries || 0 : 0;
 
