@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {fetchCharacters, fetchMoreCharacters, setIsLoading} from '../redux/actions';
-import {AppBar, Masonry} from '../components';
+import {AppBar, Masonry, NotFoundMessage} from '../components';
 
 const defaultParams = {limit:20}
 const getFetchParams = (searchText=null, customParams={}) => {
@@ -40,18 +40,20 @@ const Master = (props) => {
                         searchPlaceholder="Search Characters" />
                 {isLoading ? 
                     <Masonry.Skeleton /> :
-                    <Masonry items = {
-                        characters.map(char => ({
-                            id: char.id,
-                            title: char.name,
-                            imageSrc: `${char.thumbnail.path}.${char.thumbnail.extension}`
-                        }))
-                    }
-                    total = {total}
-                    loadMore = {() => fetchMoreCharacters(getFetchParams(searchText, {
-                            offset: characters.length
-                        }))}
-                    />}
+                    characters.length > 0 ? 
+                            <Masonry items = {
+                                characters.map(char => ({
+                                    id: char.id,
+                                    title: char.name,
+                                    imageSrc: `${char.thumbnail.path}.${char.thumbnail.extension}`
+                                }))
+                            }
+                            total = {total}
+                            loadMore = {() => fetchMoreCharacters(getFetchParams(searchText, {
+                                    offset: characters.length
+                                }))}
+                            /> :
+                        <NotFoundMessage message="Characters Not Found" />}
             </div>
 
 }

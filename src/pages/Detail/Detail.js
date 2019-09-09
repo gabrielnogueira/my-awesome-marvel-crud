@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {AppBar, Masonry} from '../components';
+import {AppBar, Masonry, NotificationMessage, NotFoundMessage} from '../components';
 import {setCharacter, fetchCharacter, fetchMoreSeries, setCharacterData} from '../redux/actions';
 import {getSelectedCharacter, getSeries, getTotalSeries} from  '../redux/selectors';
 import {reduxForm} from 'redux-form';
@@ -91,10 +91,11 @@ const Details = (props) => {
 
     const classes = useStyles();
     const [stateEdit, setStateEdit] = useState(false);
-
+    let _successMessageSetOpen;
     const saveCharacter = ({name, description}) => {
         setCharacterData(selectedCharacterId, name, description)
         setStateEdit(false);
+        _successMessageSetOpen(true);
     }
 
     const cancelEdit = () => {
@@ -141,19 +142,25 @@ const Details = (props) => {
             
             {series == null ? 
                     <Masonry.Skeleton /> :
-                    <Masonry items = {
-                        series.map(ser => ({
-                            id: ser.id,
-                            title: ser.title,
-                            imageSrc: `${ser.thumbnail.path}.${ser.thumbnail.extension}`
-                        }))
+                    series.length > 0 ? <Masonry items = {
+                                            series.map(ser => ({
+                                                id: ser.id,
+                                                title: ser.title,
+                                                imageSrc: `${ser.thumbnail.path}.${ser.thumbnail.extension}`
+                                            }))
+                                        }
+                                        total = {totalSeries}
+                                        loadMore = {() => fetchMoreSeries(selectedCharacter.id, {
+                                                offset: series.length,
+                                                ...defaultParams
+                                            })}
+                                        /> :
+                                        <NotFoundMessage message="Series Not Found" />
                     }
-                    total = {totalSeries}
-                    loadMore = {() => fetchMoreSeries(selectedCharacter.id, {
-                            offset: series.length,
-                            ...defaultParams
-                        })}
-                    />}
+
+        <NotificationMessage onLoad={setOpen => (_successMessageSetOpen = setOpen)}  onClose={()=>{_successMessageSetOpen(false)}}
+          variant="success"
+          message="Character Saved Successfully!" />
         </div>
 }
 
