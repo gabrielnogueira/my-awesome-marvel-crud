@@ -35,11 +35,22 @@ const Master = (props) => {
     }, [fetchCharacters, searchText])
 
     return  <div>
-                <AppBar title={<div>Marvel Comics Explorer</div>} onSearch={(value)=> (value.length >= 3 || !value) && searchCharacters(value)} searchPlaceholder="Search Characters" />
-                {isLoading ? <div><Masonry.Skeleton /></div> :
-                <Masonry items={characters.map(char=>({id:char.id, title:char.name, imageSrc:`${char.thumbnail.path}.${char.thumbnail.extension}` }))}
-                         total={total}
-                         loadMore={()=> fetchMoreCharacters(getFetchParams(searchText, {offset:characters.length}))}
+                <AppBar title={<div>Marvel Comics Explorer</div>} 
+                        onSearch={(value)=> (value.length >= 3 || !value) && searchCharacters(value)} 
+                        searchPlaceholder="Search Characters" />
+                {isLoading ? 
+                    <Masonry.Skeleton /> :
+                    <Masonry items = {
+                        characters.map(char => ({
+                            id: char.id,
+                            title: char.name,
+                            imageSrc: `${char.thumbnail.path}.${char.thumbnail.extension}`
+                        }))
+                    }
+                    total = {total}
+                    loadMore = {() => fetchMoreCharacters(getFetchParams(searchText, {
+                            offset: characters.length
+                        }))}
                     />}
             </div>
 

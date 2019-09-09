@@ -34,6 +34,28 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
         },
+    },
+    editImage:{
+        width:'400px', 
+        borderRadius: '10px'
+    },
+    editContent: {
+        paddingTop: 40,
+        paddingLeft: 40,
+        paddingRight: 40,
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        width: '100%'
+    },
+    editButtonGroup: {
+        width: '100%',
+        textAlign: 'right'
+    },
+    seriesWrapper: {
+        maxWidth: '960px',
+        marginRight: 'auto',
+        marginLeft: 'auto'
     }
   }));
 
@@ -94,32 +116,44 @@ const Details = (props) => {
    
    return <div>
             <AppBar title={<div style={{width:'100%', textAlign:'center'}}>{selectedCharacter.name}</div>} />
-            {!selectedCharacter.id ? <ContentSkeleton /> : <div className={classes.editArea} >
-                <img style={{width:'400px', borderRadius: '10px'}} src={charImgSrc} alt={selectedCharacter.name} />
-                <div style={{paddingTop:40, paddingLeft:40, paddingRight:40, display:'flex', justifyContent:'center', flexDirection:'column', width:'100%'}}>
-                    <Field name="name" component={renderTextField} label="Name" disabled={!stateEdit} />
-                    <Field name="description" component={renderTextField} label="Description" style={{marginTop:20}} multiline rows={10} rowsMax={10} disabled={!stateEdit} />
-                    <div style={{width:'100%', textAlign:'right'}}>
-                        {!stateEdit && <Button className={classes.button} onClick={()=>setStateEdit(true)}>Edit</Button>}
-                        {stateEdit && <div>
-                            <Button variant="contained" color="primary" className={classes.button}  onClick={handleSubmit(saveCharacter)}>Save</Button>
-                            <Button variant="outlined" className={classes.button} onClick={()=>cancelEdit()}>Cancel</Button>
-                        </div>}
-                    </div>
-                </div>
-            </div>}
-            <div style={{maxWidth: '960px', marginRight: 'auto', marginLeft: 'auto'}}>
+            {!selectedCharacter.id ? 
+                    <ContentSkeleton /> : 
+                    <div className={classes.editArea}>
+                        <img className={classes.editImage} src={charImgSrc} alt={selectedCharacter.name} />
+                        <div className={classes.editContent}>
+                            <Field name="name" component={renderTextField} label="Name" disabled={!stateEdit} />
+                            <Field name="description" component={renderTextField} label="Description" style={{marginTop:20}} multiline rows={10} rowsMax={10} disabled={!stateEdit} />
+                            <div className={classes.editButtonGroup}>
+                                {!stateEdit && <Button className={classes.button} onClick={()=>setStateEdit(true)}>Edit</Button>}
+                                {stateEdit && <div>
+                                    <Button variant="contained" color="primary" className={classes.button}  onClick={handleSubmit(saveCharacter)}>Save</Button>
+                                    <Button variant="outlined" className={classes.button} onClick={()=>cancelEdit()}>Cancel</Button>
+                                </div>}
+                            </div>
+                        </div>
+                    </div>}
+            <div className={classes.seriesWrapper}>
                 <Typography gutterBottom variant="h6" style={{marginLeft: '24px'}}>
                     Series
                 </Typography>
                 <Divider variant="middle" />
             </div>
             
-            {series == null ? <Masonry.Skeleton /> :
-            <Masonry items={series.map(ser=>({id:ser.id, title:ser.title, imageSrc:`${ser.thumbnail.path}.${ser.thumbnail.extension}`}))}
-                        total={totalSeries}
-                        loadMore={()=> fetchMoreSeries(selectedCharacter.id, {offset:series.length, ...defaultParams})}
-                />}
+            {series == null ? 
+                    <Masonry.Skeleton /> :
+                    <Masonry items = {
+                        series.map(ser => ({
+                            id: ser.id,
+                            title: ser.title,
+                            imageSrc: `${ser.thumbnail.path}.${ser.thumbnail.extension}`
+                        }))
+                    }
+                    total = {totalSeries}
+                    loadMore = {() => fetchMoreSeries(selectedCharacter.id, {
+                            offset: series.length,
+                            ...defaultParams
+                        })}
+                    />}
         </div>
 }
 
