@@ -1,68 +1,74 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# My Awesome Marvel Crud!
 
-## Available Scripts
+This is a practical activity proposed by [Softplan](https://www.softplan.com.br) as a challenge in their selection process.
 
-In the project directory, you can run:
+The challenge is create an app that is possible to list marvel characters consumed from marvel api, showing image and name of each characters. User Has to be possible to search for a character. User also can see details of a character by clicking on his image/name, like character description or series. User has to be able to edit the character information and save.
 
-### `npm start`
+The tech stack premisses of this challenge are:
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  * Must use create-react-app;
+  * Must use redux;
+  * Must use react-router;
+  * Use our favorit test lib;
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## How this works?
+### App usage
+1. When open the app, it will list the first 20 characters of marvel api;
+2. The characters are show in a masonry list, with infinite scroll. Scroll down to load more characters;
+3. You can use the search field on top-right to search a determine characters (min of 3 char to start searching);
+4. Click on character card to see details, like description and series;
+5. The first 10 series will be loaded with the character content. They will bey show in a masonry list, with infinite scroll. Scroll down to load more series. 
+6. Click on edit button to change character information. Click on save to confirm the edit.
 
-### `npm test`
+### Some libraries used
+1. @material-ui to style;
+2. redux-thunk to side effects;
+3. react-content-loader to skeleton loading;
+3. redux-form to form edit;
+5. https://w3bits.com/labs/css-masonry/ to style masonry list.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Simplified technical pipeline flow
+1. When app starts, it is shown a skeleton loading while is fetched the first 20 characters in marvel api using axios lib;
+2. When the api returns, it is shown the characteres using css-masonry style, as mentioned above;
+3. When user search for a character, skeleton loading is shown while marvel api is fetched with custom parameters.
+4. When user click on a character, the character data is loaded on details screen, and the series of this characters is fetched on marvel api. While the series are fetched, and skeleton loading is displayed.
+5. When user click on edit, the inputs are enabled to edit data. If user cancel the edit, the redux-form is reinitialized with the original values. If user save the edit, new data are saved on state.
 
-### `npm run build`
+## TODO list
+### Required
+- [x] SetUp the tech stack;
+- [x] Connect with the marvel API;
+- [x] Stylize Master screen;
+- [x] Stylize Details screen;
+- [x] Edit data on Details screen;
+- [x] Save state to localStorage;
+- [ ] Test Cover 100%;
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Other Tasks
+- [ ] Create a zero to final guide of this project;
+- [ ] Add proptypes to components
+- [ ] Add Flow type checker;
+- [ ] Use suspense and lazy to better code split and error handling
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Getting Started with this project
+  Clone this repo and install dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+$ git clone https://github.com/gabrielnogueira/my-awesome-marvel-crud.git
+$ cd my-awesome-marvel-crud
+$ yarn
+```
+  Create on app root a file named <strong><em>.env.development</em></strong> with your marvel api keys:
+  
+  ```bash
+  REACT_APP_API_PUBLIC_KEY=MY_PUBLIC_KEY
+  REACT_APP_API_PRIVATE_KEY=MY_PRIVATE_KEY
+```
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+  Run the app:
+  
+  ```bash
+  $ yarn start
+  ```
+  
+  and enjoy!
