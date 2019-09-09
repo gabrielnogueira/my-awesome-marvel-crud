@@ -1,6 +1,10 @@
 import {actionTypes} from './actions';
 
-export default (state = {}, action) => {
+export default (state = {
+    characters:[],
+    customCharacters:[],
+    isLoading: true,
+}, action) => {
     const {data} = action.payload ? action.payload : {};
     switch(action.type){
         case actionTypes.FETCH_CHARACTERS:
@@ -8,6 +12,7 @@ export default (state = {}, action) => {
                 ...state,
                 characters: data.results,
                 total: data.total,
+                isLoading:false
             }
         case actionTypes.FETCH_MORE_CHARACTERS:
             return {
@@ -29,8 +34,8 @@ export default (state = {}, action) => {
                             name,
                             description
                         }
-                    }
-                    
+                    },
+                    isLoading:false
                 }
         case actionTypes.FETCH_CHARACTER:
             const {series, character}  = data;
@@ -43,8 +48,8 @@ export default (state = {}, action) => {
                         series: series.results,
                         totalSeries: series.total
                     }
-                }
-                
+                },
+                isLoading:false
             }
         case actionTypes.FETCH_SERIES:
                 return {
@@ -57,7 +62,6 @@ export default (state = {}, action) => {
                             totalSeries: data.series.total,
                         }
                     }
-                    
                 }
         case actionTypes.FETCH_MORE_SERIES:
             return {
@@ -74,6 +78,11 @@ export default (state = {}, action) => {
                     }
                 }
             }
+        case actionTypes.SET_IS_LOADING:
+        return {
+            ...state,
+           isLoading:action.payload
+        }
         default:
             return state
     }

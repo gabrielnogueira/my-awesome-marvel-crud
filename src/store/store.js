@@ -25,9 +25,4 @@ const configureStore = (initialState) =>{
   return createStore(rootReducer, initialState, enhancer);
 }
 
-export default configureStore({
-  pages:{
-    characters:[],
-    customCharacters:[]
-  }
-});
+export default configureStore({});

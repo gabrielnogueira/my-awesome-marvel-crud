@@ -5,10 +5,12 @@ export const actionTypes = {
     FETCH_MORE_CHARACTERS: 'FETCH_MORE_CHARACTERS',
     FETCH_CHARACTER: 'FETCH_CHARACTER',
     FETCH_MORE_SERIES: 'FETCH_MORE_SERIES',
-    SET_CHARACTER_DATA: 'SET_CHARACTER_DATA'
+    SET_CHARACTER_DATA: 'SET_CHARACTER_DATA',
+    SET_IS_LOADING: 'SET_IS_LOADING'
 }
 
 export const fetchCharacters = params => dispatch => {
+    dispatch(setIsLoading(true));
     api.get('/characters', {
         ...params
     }).then(result=>dispatch({
@@ -65,4 +67,9 @@ export const fetchMoreSeries = (id, params) => dispatch => {
 export const setCharacterData = (id, name, description) => ({
     type:actionTypes.SET_CHARACTER_DATA,
     payload: {data:{id, name, description}}
+})
+
+export const setIsLoading = (isLoading) => ({
+    type:actionTypes.SET_IS_LOADING,
+    payload: isLoading
 })

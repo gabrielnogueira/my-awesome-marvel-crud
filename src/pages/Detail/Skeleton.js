@@ -1,37 +1,57 @@
+//http://danilowoz.com/create-content-loader/
 import React from 'react';
 import ContentLoader from "react-content-loader"
+import { useMediaQuery } from 'react-responsive'
 
-export default () => (
-  <ContentLoader 
-    height={600}
-    width={900}
-    speed={2}
-    primaryColor="#dad8d8"
-    secondaryColor="#e6e6e6"
-  >
-    <rect x="144" y="15" rx="0" ry="0" width="115" height="116" /> 
-    <rect x="179" y="141" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="266" y="15" rx="0" ry="0" width="115" height="152" /> 
-    <rect x="300" y="177" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="387" y="15" rx="0" ry="0" width="117" height="118" /> 
-    <rect x="423" y="141" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="509" y="15" rx="0" ry="0" width="116" height="99" /> 
-    <rect x="546" y="120" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="631" y="15" rx="0" ry="0" width="116" height="138" /> 
-    <rect x="665" y="160" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="144" y="173" rx="0" ry="0" width="115" height="200" /> 
-    <rect x="179" y="380" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="266" y="205" rx="0" ry="0" width="115" height="100" /> 
-    <rect x="302" y="312" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="266" y="345" rx="0" ry="0" width="115" height="50" /> 
-    <rect x="387" y="175" rx="0" ry="0" width="117" height="60" /> 
-    <rect x="423" y="241" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="387" y="275" rx="0" ry="0" width="117" height="130" /> 
-    <rect x="509" y="155" rx="0" ry="0" width="116" height="180" /> 
-    <rect x="546" y="341" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="631" y="192" rx="0" ry="0" width="116" height="138" /> 
-    <rect x="665" y="335" rx="0" ry="0" width="50" height="13" /> 
-    <rect x="631" y="370  " rx="0" ry="0" width="115" height="30" />
-  </ContentLoader>
-)
+export default (props) => {
 
+  const layoutFull = useMediaQuery({ query: '(min-width: 960px)' })
+
+  return <div style={{margin:'auto', paddingTop:2, display:'flex', justifyContent:'center'}}>
+    {layoutFull && <div style={{width:'100%'}}>
+      <ContentLoader 
+        height={600}
+        width={900}
+        speed={2}
+        primaryColor="#dad8d8"
+        secondaryColor="#e6e6e6"
+      >
+        <rect x="143" y="16" rx="0" ry="0" width="265" height="267" /> 
+        <rect x="433" y="62" rx="0" ry="0" width="87" height="19" /> 
+        <rect x="433" y="112" rx="0" ry="0" width="312" height="125" /> 
+        <rect x="702" y="249" rx="0" ry="0" width="43" height="19" /> 
+        <rect x="433" y="52" rx="0" ry="0" width="25" height="7" /> 
+        <rect x="433" y="102" rx="0" ry="0" width="50" height="7" />
+      </ContentLoader>
+    </div>}
+      {!layoutFull && <div style={{width:'100%', justifyContent:'center', padding:50, paddingTop:18}}>
+        <div style={{maxWidth:400, margin:'auto'}} >
+          <ContentLoader 
+            height={267}
+            width={265}
+            speed={2}
+            primaryColor="#f3f3f3"
+            secondaryColor="#ecebeb"
+          >
+            <rect x="0" y="0" rx="0" ry="0" width="265" height="267" />
+          </ContentLoader>
+        </div>
+
+      <div style={{paddingLeft:16, paddingTop:36}}><ContentLoader 
+            height={400}
+            width={600}
+            speed={2}
+            primaryColor="#f3f3f3"
+            secondaryColor="#ecebeb"
+            style={{minHeight:365, maxHeight:365}}
+          >
+            <rect x="0" y="13" rx="0" ry="0" width="103" height="19" /> 
+            <rect x="0" y="57" rx="0" ry="0" width="590" height="265" /> 
+            <rect x="520" y="334" rx="0" ry="0" width="51" height="19" /> 
+            <rect x="0" y="0" rx="0" ry="0" width="30" height="7" /> 
+            <rect x="0" y="43" rx="0" ry="0" width="59" height="7" />
+          </ContentLoader>
+      </div>
+          </div>}
+    </div>
+}

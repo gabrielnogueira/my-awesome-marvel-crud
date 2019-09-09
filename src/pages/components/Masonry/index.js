@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import imagesLoaded from 'imagesloaded';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
+import Skeleton from './Skeleton';
 import './masonry.css';
 
 const resizeMasonryItem = (item) => {
@@ -39,9 +40,8 @@ masonryEvents.forEach( function(event) {
   window.addEventListener(event, waitForImages);
 });
 
-export default (props) => {
+const Masonry = (props) => {
   const {items, total, loadMore} = props;
-  
  
   useEffect(() => {
     waitForImages(items);
@@ -65,3 +65,7 @@ export default (props) => {
                       </div>
          </InfiniteScroll>
 }
+
+Masonry.Skeleton = Skeleton;
+
+export default Masonry;

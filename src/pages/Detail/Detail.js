@@ -13,7 +13,7 @@ import {
     Typography
   } from '@material-ui/core'
 import {Field} from 'redux-form';
-import Skeleton from './Skeleton';
+import ContentSkeleton from './Skeleton';
 
 const defaultParams = {limit:10}
 
@@ -94,9 +94,9 @@ const Details = (props) => {
    
    return <div>
             <AppBar title={<div style={{width:'100%', textAlign:'center'}}>{selectedCharacter.name}</div>} />
-            <div className={classes.editArea} >
+            {!selectedCharacter.id ? <ContentSkeleton /> : <div className={classes.editArea} >
                 <img style={{width:'400px', borderRadius: '10px'}} src={charImgSrc} alt={selectedCharacter.name} />
-                <div style={{paddingTop:40, paddingLeft:40, display:'flex', justifyContent:'center', flexDirection:'column', width:'100%'}}>
+                <div style={{paddingTop:40, paddingLeft:40, paddingRight:40, display:'flex', justifyContent:'center', flexDirection:'column', width:'100%'}}>
                     <Field name="name" component={renderTextField} label="Name" disabled={!stateEdit} />
                     <Field name="description" component={renderTextField} label="Description" style={{marginTop:20}} multiline rows={10} rowsMax={10} disabled={!stateEdit} />
                     <div style={{width:'100%', textAlign:'right'}}>
@@ -107,7 +107,7 @@ const Details = (props) => {
                         </div>}
                     </div>
                 </div>
-            </div>
+            </div>}
             <div style={{maxWidth: '960px', marginRight: 'auto', marginLeft: 'auto'}}>
                 <Typography gutterBottom variant="h6" style={{marginLeft: '24px'}}>
                     Series
@@ -115,7 +115,7 @@ const Details = (props) => {
                 <Divider variant="middle" />
             </div>
             
-            {series == null ? <div><Skeleton /></div> :
+            {series == null ? <Masonry.Skeleton /> :
             <Masonry items={series.map(ser=>({id:ser.id, title:ser.title, imageSrc:`${ser.thumbnail.path}.${ser.thumbnail.extension}`}))}
                         total={totalSeries}
                         loadMore={()=> fetchMoreSeries(selectedCharacter.id, {offset:series.length, ...defaultParams})}

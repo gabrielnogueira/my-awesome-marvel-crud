@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {fetchCharacters, fetchMoreCharacters} from '../redux/actions';
+import {fetchCharacters, fetchMoreCharacters, setIsLoading} from '../redux/actions';
 import {AppBar, Masonry} from '../components';
-import Skeleton from './Skeleton';
 
 const defaultParams = {limit:20}
 const getFetchParams = (searchText=null, customParams={}) => {
@@ -18,17 +17,26 @@ const getFetchParams = (searchText=null, customParams={}) => {
 }
 
 const Master = (props) => {
-    const {characters = null, fetchCharacters, fetchMoreCharacters, total} = props;
+    const {characters = null, 
+        fetchCharacters, 
+        fetchMoreCharacters, 
+        setIsLoading,
+        total, 
+        isLoading} = props;
     const [searchText, setSearchText] = useState();
-    
+
+    const searchCharacters = (searchText) => {
+        setIsLoading(true);
+        setSearchText(searchText);
+    }
+
     useEffect(() => {
         fetchCharacters(getFetchParams(searchText));
     }, [fetchCharacters, searchText])
 
-    console.log(characters);
     return  <div>
-                <AppBar title={<div>Marvel Comics Explorer</div>} onSearch={(value)=> (value.length >= 3 || !value) && setSearchText(value)} searchPlaceholder="Search Characters" />
-                {(!characters || characters.length === 0) ? <div><Skeleton /></div> :
+                <AppBar title={<div>Marvel Comics Explorer</div>} onSearch={(value)=> (value.length >= 3 || !value) && searchCharacters(value)} searchPlaceholder="Search Characters" />
+                {isLoading ? <div><Masonry.Skeleton /></div> :
                 <Masonry items={characters.map(char=>({id:char.id, title:char.name, imageSrc:`${char.thumbnail.path}.${char.thumbnail.extension}` }))}
                          total={total}
                          loadMore={()=> fetchMoreCharacters(getFetchParams(searchText, {offset:characters.length}))}
@@ -40,10 +48,12 @@ const Master = (props) => {
 const mapStateToProps = ({pages}) => ({
     characters: pages.characters,
     total: pages.total,
+    isLoading: pages.isLoading
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchCharacters,
-    fetchMoreCharacters
+    fetchMoreCharacters,
+    setIsLoading
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Master)
