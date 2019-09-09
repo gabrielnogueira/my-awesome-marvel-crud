@@ -2,11 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {
     Snackbar,
     SnackbarContent,
-    Button,
     IconButton,
   } from '@material-ui/core'
   import clsx from 'clsx';
-  import { amber, green } from '@material-ui/core/colors';
+  import {green } from '@material-ui/core/colors';
   import CheckCircleIcon from '@material-ui/icons/CheckCircle';
   import ErrorIcon from '@material-ui/icons/Error';
   import CloseIcon from '@material-ui/icons/Close';
