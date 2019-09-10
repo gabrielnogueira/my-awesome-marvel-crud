@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 export default (props)=>{
     const classes = useStyles();
     
-    return <Typography className={classes.title} variant="h6" noWrap data-testid="notfound">
+    return <Typography className={classes.title} variant="h6" noWrap>
         {props.message || 'Not Found'}
     </Typography>
 }

@@ -1,10 +1,6 @@
 import Master from './Master';
 
-afterEach(() => {
-  cleanup();
-});
-
-test('load skeleton while loading', () => {
+test('load skeleton while loading', async () => {
   mockedAxios.get.mockImplementationOnce(()=> {
     return Promise.resolve({
       data: {
@@ -18,125 +14,34 @@ test('load skeleton while loading', () => {
 
   const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
 
-  const {queryByTestId, queryByTitle} = render(wrapper)
+  const {queryByTestId, queryByText} = render(wrapper)
   
   expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
   expect(queryByTestId('masonry-skeleton')).toBeInTheDocument();
 
-  waitForElement(() => queryByTitle('notfound'));
-  
-  wait(() => {
-      expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
-      expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
-      expect(queryByTitle('notfound')).toBeInTheDocument();
-  });
-});
-
-test('fetch characters ', () => {
-      mockedAxios.get.mockImplementationOnce(()=>
-        Promise.resolve({
-          data: {
-            data:{
-                results:[
-                  {
-                    id: 1,
-                    name:'Adam Warlock',
-                    description: 'This is Mocked Adam Warlock',
-                    thumbnail: { path: 'AdamWarlockPath', extension:'jpg' }
-                  },{
-                    id: 2,
-                    name:'Some Other Character',
-                    description: 'This is Mocked Character',
-                    thumbnail: { path: 'CharPath', extension:'jpg' }
-                  }
-                ],
-                total:2
-            }
-          }
-        })
-      );
-
-      const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
-    
-      const {queryByTestId, queryByText, getByTestId} = render(wrapper)
-      
-      expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
-    
-      waitForElement(() => document.querySelector('.masonry-item'));
-      
-      wait(() => {
-          expect(document.querySelector('.masonry-item')).toBeInTheDocument();
-          expect(document.querySelectorAll('.masonry-item').length).toBe(2);
-          expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
-          expect(queryByTitle('notfound')).not.toBeInTheDocument();
-          expect(queryByText('/Adam/i')).toBeInTheDocument();
-          expect(queryByText('/Other/i')).toBeInTheDocument();
-      });
-    }
-);
-
-
-test('fetch characters with invalid search', () => {
-  mockedAxios.get.mockImplementationOnce(()=>
-    Promise.resolve({
-      data: {
-        data:{
-            results:[],
-            total:0
-        }
-      }
-    })
-  );
-
-  const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
-
-  const {queryByTestId, queryByTitle} = render(wrapper)
+  await waitForElement(() => queryByText(/not found/i));
   
   expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
-
-  waitForElement(() => queryByTitle('notfound'));
-  
-  wait(() => {
-      expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
-      expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
-      expect(queryByTitle('notfound')).toBeInTheDocument();
-  });
+  expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
+  expect(queryByText(/not found/i)).toBeInTheDocument();
 });
 
-test('fetch characters with a valid search', async () => {
+test('fetch characters ', async () => {
   mockedAxios.get.mockImplementationOnce(()=>
     Promise.resolve({
       data: {
         data:{
-            results:[],
-            total:0
-        }
-      }
-    })
-  );
-
-  const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
-
-  const {getByTestId, queryByTestId, queryByText, queryByTitle, getByLabelText} = render(wrapper)
-  
-  expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
-
-  waitForElement(() => queryByTitle('notfound'));
-
-  mockedAxios.get.mockImplementationOnce(()=>
-    Promise.resolve({
-      data: {
-        data:{
-            results:[{
+            results:[
+              {
                 id: 1,
-                name:'Hulk 1',
-                description: 'This is Mocked Hulk 1',
-                thumbnail: { path: 'Hulk1Path', extension:'jpg' }
+                name:'Adam Warlock',
+                description: 'This is Mocked Adam Warlock',
+                thumbnail: { path: 'AdamWarlockPath', extension:'jpg' }
               },{
                 id: 2,
-                name:'Hulk 2',
-                description: 'This is Mocked Hulk 2',
-                thumbnail: { path: 'Hulk2Path', extension:'jpg' }
+                name:'Some Other Character',
+                description: 'This is Mocked Character',
+                thumbnail: { path: 'CharPath', extension:'jpg' }
               }
             ],
             total:2
@@ -145,44 +50,113 @@ test('fetch characters with a valid search', async () => {
     })
   );
 
-  const search = getByLabelText("search");
+  const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
 
-  fireEvent.change(search, { target: { value: 'hulk' } });
-
-  jest.advanceTimersByTime(500)
-
-  fireEvent.keyDown(search, { key: 'Enter', code: 13 });
-
-  waitForElement(() => document.querySelector('.masonry-item'));
+  const {queryByTestId, queryByText} = render(wrapper);
   
-  wait(() => {
-      expect(document.querySelector('.masonry-item')).toBeInTheDocument();
-      expect(document.querySelectorAll('.masonry-item').length).toBe(2);
-      expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
-      expect(queryByTitle('notfound')).not.toBeInTheDocument();
-      expect(queryByText('/Hulk 1/i')).toBeInTheDocument();
-      expect(queryByText('/Hulk 2/i')).toBeInTheDocument();
-  });
+  expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
+  expect(queryByTestId('masonry-skeleton')).toBeInTheDocument();
+  
+  await waitForElement(() => document.querySelector('.masonry-item'));
+  
+  expect(document.querySelector('.masonry-item')).toBeInTheDocument();
+  expect(document.querySelectorAll('.masonry-item').length).toBe(2);
+  expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
+  expect(queryByText(/not found/i)).not.toBeInTheDocument();
+  expect(queryByText(/adam/i)).toBeInTheDocument();
+  expect(queryByText(/other/i)).toBeInTheDocument();
 });
 
-test('fetch more characters ', async () => {
 
-  const result = [];
-  
-  for (let i; i < 40; i++){
-    result.push({
-      id: i,
-      name:'Some Character',
-      description: 'This is Mocked Character',
-      thumbnail: { path: 'CharPath'+i, extension:'jpg' }
-    })
-  }
+test('fetch characters with invalid search', async () => {
   mockedAxios.get.mockImplementationOnce(()=>
     Promise.resolve({
       data: {
         data:{
-            results:result.splice(0,20),
-            total:result.length
+            results:[
+              {
+                id: 1,
+                name:'Adam Warlock',
+                description: 'This is Mocked Adam Warlock',
+                thumbnail: { path: 'AdamWarlockPath', extension:'jpg' }
+              },{
+                id: 2,
+                name:'Some Other Character',
+                description: 'This is Mocked Character',
+                thumbnail: { path: 'CharPath', extension:'jpg' }
+              }
+            ],
+            total:2,
+        }
+      }
+    })
+  ).mockImplementationOnce(()=>
+  Promise.resolve({
+    data: {
+      data:{
+          results:[],
+          total:0
+      }
+    }
+  })
+);
+
+  const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
+
+  const {queryByTestId, queryByText, getByLabelText} = render(wrapper)
+  
+  expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
+  expect(queryByTestId('masonry-skeleton')).toBeInTheDocument();
+  
+  await waitForElement(() => document.querySelector('.masonry-item'));
+
+  const search = getByLabelText("search");
+
+  act(() => {
+    fireEvent.change(search, { target: { value: 'invalidCharacter' } });
+  });
+
+  await waitForElement(() => queryByText(/not found/i));
+
+  expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
+  expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
+  expect(queryByText(/not found/i)).toBeInTheDocument();
+});
+
+test('fetch characters with a valid search', async () => {
+  mockedAxios.get.mockImplementationOnce(()=>
+    Promise.resolve({
+      data: {
+        data:{
+            results:[
+              {
+                id: 1,
+                name:'Adam Warlock',
+                description: 'This is Mocked Adam Warlock',
+                thumbnail: { path: 'AdamWarlockPath', extension:'jpg' }
+              },{
+                id: 2,
+                name:'Some Other Character',
+                description: 'This is Mocked Character',
+                thumbnail: { path: 'CharPath', extension:'jpg' }
+              }
+            ],
+            total:2,
+        }
+      }
+    })
+  ).mockImplementationOnce(()=>
+    Promise.resolve({
+      data: {
+        data:{
+          results:[{
+            id: 1,
+            name:'Hulk 1',
+            description: 'This is Mocked Hulk 1',
+            thumbnail: { path: 'Hulk1Path', extension:'jpg' }
+          }
+        ],
+        total:1
         }
       }
     })
@@ -190,32 +164,99 @@ test('fetch more characters ', async () => {
 
   const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
 
-  const {queryByTestId, queryByText, getByTestId} = render(wrapper)
+  const {queryByTestId, queryByText, getByLabelText} = render(wrapper)
   
   expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
+  expect(queryByTestId('masonry-skeleton')).toBeInTheDocument();
+  
+  await waitForElement(() => document.querySelector('.masonry-item'));
 
-  waitForElement(() => document.querySelector('.masonry-item'));
+  const search = getByLabelText("search");
 
-  mockedAxios.get.mockImplementationOnce(()=>
-    Promise.resolve({
-      data: {
-        data:{
-            results:result.splice(20,40),
-            total:result.length
-        }
-      }
-    })
-  );
-
-  fireEvent.scroll(global, {target:{scrollY:800}});
-
-  jest.advanceTimersByTime(500);
-
-  wait(() => {
-      expect(document.querySelector('.masonry-item')).toBeInTheDocument();
-      expect(document.querySelectorAll('.masonry-item').length).toBe(result.length);
-      expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
-      expect(queryByTitle('notfound')).not.toBeInTheDocument();
+  act(() => {
+    fireEvent.change(search, { target: { value: 'hulk' } });
   });
-}
-);
+  
+  await waitForElement(() => queryByText(/Hulk 1/i));
+
+  expect(document.querySelector('.masonry-item')).toBeInTheDocument();
+  expect(document.querySelectorAll('.masonry-item').length).toBe(1);
+  expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
+  expect(queryByText(/not found/i)).not.toBeInTheDocument();
+  expect(queryByText(/Hulk 1/i)).toBeInTheDocument();
+});
+
+
+//https://codesandbox.io/s/test-scroll-0rbmh?from-embed
+// test('fetch more characters ', async () => {
+
+//   mockedAxios.get.mockImplementationOnce(()=>
+//   Promise.resolve({
+//     data: {
+//       data:{
+//           results:[
+//             {
+//               id: 1,
+//               name:'Adam Warlock',
+//               description: 'This is Mocked Adam Warlock',
+//               thumbnail: { path: 'AdamWarlockPath', extension:'jpg' }
+//             },{
+//               id: 2,
+//               name:'Some Other Character',
+//               description: 'This is Mocked Character',
+//               thumbnail: { path: 'CharPath', extension:'jpg' }
+//             }
+//           ],
+//           total:4
+//       }
+//     }
+//   })
+// ).mockImplementationOnce(()=>
+// Promise.resolve({
+//   data: {
+//     data:{
+//         results:[
+//           {
+//             id: 3,
+//             name:'She Hulk',
+//             description: 'This is Mocked She Hulk',
+//             thumbnail: { path: 'SheHulkPath', extension:'jpg' }
+//           },{
+//             id: 4,
+//             name:'Wolverine',
+//             description: 'This is Mocked Wolverine',
+//             thumbnail: { path: 'WolverinePath', extension:'jpg' }
+//           }
+//         ],
+//         total:4
+//     }
+//   }
+// })
+// );
+
+// const wrapper = reduxWrap(<Master />, {pages:{characters:[]}});
+
+// const {queryByTestId, getByTestId, queryByText} = render(wrapper);
+
+// expect(document.querySelector('.masonry-item')).not.toBeInTheDocument();
+// expect(queryByTestId('masonry-skeleton')).toBeInTheDocument();
+
+// await waitForElement(() => document.querySelector('.masonry-item'));
+
+// act(() => {
+//   fireEvent.scroll(window, {target:{x:0,y:1600}});
+// });
+
+// await waitForElement(() => queryByText(/she/i));
+
+// expect(document.querySelector('.masonry-item')).toBeInTheDocument();
+// expect(document.querySelectorAll('.masonry-item').length).toBe(4);
+// expect(queryByTestId('masonry-skeleton')).not.toBeInTheDocument();
+// expect(queryByText(/not found/i)).not.toBeInTheDocument();
+// expect(queryByText(/adam/i)).toBeInTheDocument();
+// expect(queryByText(/other/i)).toBeInTheDocument();
+// expect(queryByText(/she/i)).toBeInTheDocument();
+// expect(queryByText(/wolverine/i)).toBeInTheDocument();
+
+// }
+// );

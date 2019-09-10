@@ -1,7 +1,7 @@
 
 // import '@testing-library/react/dont-cleanup-after-each'
 import '@testing-library/jest-dom/extend-expect'
-import { render, fireEvent, wait, waitForElement, waitForElementToBeRemoved, waitForDomChange, cleanup} from '@testing-library/react';
+import { render, fireEvent, wait, waitForElement, waitForElementToBeRemoved, waitForDomChange, cleanup, act} from '@testing-library/react';
 import axios from 'axios';
 import { Provider } from 'react-redux';
 import {createStore, applyMiddleware, compose, combineReducers } from 'redux';
@@ -10,10 +10,7 @@ import {reducers as pagesReducer} from './pages';
 import {BrowserRouter} from 'react-router-dom';
 
 jest.mock('axios');
-jest.useFakeTimers();
-
-beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect))
-afterAll(() => React.useEffect.mockRestore())
+jest.useRealTimers()
 
 global.render = render;
 global.fireEvent = fireEvent;
@@ -24,6 +21,7 @@ global.waitForDomChange = waitForDomChange;
 global.React = require('react');
 global.mockedAxios = axios;
 global.cleanup = cleanup;
+global.act = act;
 
 const configureStore = (initialState) =>{
     const rootReducer = combineReducers({

@@ -24,7 +24,6 @@ const Master = (props) => {
         total, 
         isLoading} = props;
     const [searchText, setSearchText] = useState();
-    
     const searchCharacters = (searchText) => {
         setIsLoading(true);
         setSearchText(searchText);
