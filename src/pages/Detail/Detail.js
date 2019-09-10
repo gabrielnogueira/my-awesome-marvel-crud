@@ -119,7 +119,7 @@ const Details = (props) => {
             <AppBar title={<div style={{width:'100%', textAlign:'center'}}>{selectedCharacter.name}</div>} />
             {!selectedCharacter.id ? 
                     <ContentSkeleton /> : 
-                    <div className={classes.editArea}>
+                    <div className={classes.editArea} data-testid="content">
                         <img className={classes.editImage} src={charImgSrc} alt={selectedCharacter.name} />
                         <div className={classes.editContent}>
                             <Field name="name" component={renderTextField} label="Name" disabled={!stateEdit} />

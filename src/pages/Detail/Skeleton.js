@@ -7,7 +7,7 @@ export default (props) => {
 
   const layoutFull = useMediaQuery({ query: '(min-width: 960px)' })
 
-  return <div style={{margin:'auto', paddingTop:2, display:'flex', justifyContent:'center'}}>
+  return <div data-testid="content-skeleton" style={{margin:'auto', paddingTop:2, display:'flex', justifyContent:'center'}}>
     {layoutFull && <div style={{width:'100%'}}>
       <ContentLoader 
         height={600}
