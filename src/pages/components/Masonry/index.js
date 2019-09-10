@@ -12,14 +12,10 @@ const resizeMasonryItem = (item) => {
   var grid = document.getElementsByClassName('masonry')[0];
   if( grid ) {
     var rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
-        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows')),
-        gridImagesAsContent = item.querySelector('img.masonry-content');
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
     var rowSpan = Math.ceil((item.querySelector('.masonry-content').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
 
     item.style.gridRowEnd = 'span '+rowSpan;
-    if(gridImagesAsContent) {
-      item.querySelector('img.masonry-content').style.height = item.getBoundingClientRect().height + "px";
-    }
   }
 }
 
