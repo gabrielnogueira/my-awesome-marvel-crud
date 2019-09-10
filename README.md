@@ -49,6 +49,8 @@ The tech stack premisses of this challenge are:
 - [ ] Add proptypes to components
 - [ ] Add Flow type checker;
 - [ ] Use suspense and lazy to better code split and error handling
+- [ ] Improve tests and code coverage
+
 
 ## Getting Started with this project
   Clone this repo and install dependencies:
