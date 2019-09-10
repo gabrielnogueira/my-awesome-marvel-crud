@@ -13,11 +13,12 @@ export const fetchCharacters = params => dispatch => {
     dispatch(setIsLoading(true));
     api.get('/characters', {
         ...params
-    }).then(result=>dispatch({
+    }).then(result=>{
+        return dispatch({
             type: actionTypes.FETCH_CHARACTERS,
             payload: result.data
-        }
-    ))
+        })
+    })
 }
 
 export const fetchMoreCharacters = params => dispatch => {

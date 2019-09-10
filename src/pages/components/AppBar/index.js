@@ -93,7 +93,7 @@ export default (props) => {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ 'aria-label': 'search'}}
             />
           </div>}
         </Toolbar>

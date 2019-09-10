@@ -9,7 +9,7 @@ export default (props) => {
   const layout4Columns = useMediaQuery({ query: '(min-width: 768px)' })
   const layout5Columns = useMediaQuery({query: '(min-width: 1024px)'})
 
-  return <div style={{height:'600px', margin:'auto', paddingTop:2, display:'flex', justifyContent:'center'}}>
+  return <div data-testid="masonry-skeleton" style={{height:'600px', margin:'auto', paddingTop:2, display:'flex', justifyContent:'center'}}>
       <div style={{width:'170px'}}>
         <ContentLoader 
           height={400}

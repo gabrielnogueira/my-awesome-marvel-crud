@@ -5,7 +5,7 @@ export default (state = {
     customCharacters:[],
     isLoading: true,
 }, action) => {
-    const {data} = action.payload ? action.payload : {};
+    const data = action.payload ? action.payload.data || {} : {};
     switch(action.type){
         case actionTypes.FETCH_CHARACTERS:
             return {
